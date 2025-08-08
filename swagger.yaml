@@ -1,0 +1,701 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/ping": {
+      "get": {
+        "operationId": "AppController_ping",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_signIn",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "User login credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "operationId": "AuthController_getProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "User registration credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/player": {
+      "get": {
+        "operationId": "PlayerController_getAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Player"
+        ]
+      },
+      "post": {
+        "operationId": "PlayerController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Player"
+        ]
+      }
+    },
+    "/player/{id}": {
+      "get": {
+        "operationId": "PlayerController_getOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Player"
+        ]
+      }
+    },
+    "/bidType": {
+      "get": {
+        "operationId": "BidTypeController_getAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "BidType"
+        ]
+      }
+    },
+    "/bidType/{id}": {
+      "get": {
+        "operationId": "BidTypeController_getOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "BidType"
+        ]
+      }
+    },
+    "/bidType/name/{name}": {
+      "get": {
+        "operationId": "BidTypeController_getByName",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "BidType"
+        ]
+      }
+    },
+    "/bid": {
+      "get": {
+        "operationId": "BidController_getAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Bid"
+        ]
+      }
+    },
+    "/bid/{id}": {
+      "get": {
+        "operationId": "BidController_getOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Bid"
+        ]
+      }
+    },
+    "/round": {
+      "get": {
+        "operationId": "RoundController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of all rounds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Round"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get all rounds",
+        "tags": [
+          "round"
+        ]
+      },
+      "post": {
+        "operationId": "RoundController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoundDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The round has been successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Round"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create a new round",
+        "tags": [
+          "round"
+        ]
+      }
+    },
+    "/round/{id}": {
+      "get": {
+        "operationId": "RoundController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The round",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Round"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Round not found"
+          }
+        },
+        "summary": "Get a round by id",
+        "tags": [
+          "round"
+        ]
+      }
+    },
+    "/silent-bid": {
+      "get": {
+        "operationId": "SilentBidController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of all silent bids",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SilentBid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get all silent bids",
+        "tags": [
+          "silent-bid"
+        ]
+      }
+    },
+    "/silent-bid/{id}": {
+      "get": {
+        "operationId": "SilentBidController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The silent bid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SilentBid"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Silent bid not found"
+          }
+        },
+        "summary": "Get a silent bid by id",
+        "tags": [
+          "silent-bid"
+        ]
+      }
+    },
+    "/game": {
+      "get": {
+        "operationId": "GameController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of all games",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Game"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get all games for a user",
+        "tags": [
+          "game"
+        ]
+      },
+      "post": {
+        "operationId": "GameController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGameDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The game has been successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Game"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create a new game",
+        "tags": [
+          "game"
+        ]
+      }
+    },
+    "/game/active": {
+      "get": {
+        "operationId": "GameController_findActiveGame",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The active game for the user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Game"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get the active game for the user",
+        "tags": [
+          "game"
+        ]
+      }
+    },
+    "/game/finish": {
+      "post": {
+        "operationId": "GameController_finishGame",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The game has been successfully finished",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Game"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Finish the active game for the user",
+        "tags": [
+          "game"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Ulti API",
+    "description": "The Ulti game API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": ""
+    },
+    {
+      "name": "game",
+      "description": ""
+    },
+    {
+      "name": "round",
+      "description": ""
+    },
+    {
+      "name": "bid",
+      "description": ""
+    },
+    {
+      "name": "player",
+      "description": ""
+    }
+  ],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ]
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password",
+          "confirmPassword"
+        ]
+      },
+      "Round": {
+        "type": "object",
+        "properties": {}
+      },
+      "SilentBidOutcomeDto": {
+        "type": "object",
+        "properties": {
+          "silentBidId": {
+            "type": "number",
+            "description": "The silent bid ID"
+          },
+          "attackerWon": {
+            "type": "boolean",
+            "description": "Whether the attacker won this silent bid"
+          }
+        },
+        "required": [
+          "silentBidId",
+          "attackerWon"
+        ]
+      },
+      "ContraDto": {
+        "type": "object",
+        "properties": {
+          "bidTypeId": {
+            "type": "number",
+            "description": "The bid type ID to be multiplied"
+          },
+          "defender1Multiplier": {
+            "type": "number",
+            "description": "The multiplier for defender1",
+            "enum": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              32,
+              64
+            ]
+          },
+          "defender2Multiplier": {
+            "type": "number",
+            "description": "The multiplier for defender2",
+            "enum": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              32,
+              64
+            ]
+          }
+        },
+        "required": [
+          "bidTypeId",
+          "defender1Multiplier",
+          "defender2Multiplier"
+        ]
+      },
+      "CreateRoundDto": {
+        "type": "object",
+        "properties": {
+          "bidId": {
+            "type": "number",
+            "description": "The bid ID for this round"
+          },
+          "attackerId": {
+            "type": "number",
+            "description": "The attacker player ID"
+          },
+          "defender1Id": {
+            "type": "number",
+            "description": "The first defender player ID"
+          },
+          "defender2Id": {
+            "type": "number",
+            "description": "The second defender player ID"
+          },
+          "attackerWonIds": {
+            "description": "Array of BidType IDs that the attacker won",
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "silentBids": {
+            "description": "Array of silent bid outcomes",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SilentBidOutcomeDto"
+            }
+          },
+          "contras": {
+            "description": "Array of contras applied to bid types",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContraDto"
+            }
+          }
+        },
+        "required": [
+          "bidId",
+          "attackerId",
+          "defender1Id",
+          "defender2Id",
+          "attackerWonIds",
+          "silentBids",
+          "contras"
+        ]
+      },
+      "SilentBid": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier for the silent bid",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the silent bid",
+            "example": "Csendes ulti"
+          },
+          "score": {
+            "type": "number",
+            "description": "Score value of the silent bid",
+            "example": 2
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "score"
+        ]
+      },
+      "Game": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateGameDto": {
+        "type": "object",
+        "properties": {
+          "playerIds": {
+            "description": "Array of Player IDs (3-5 players)",
+            "minItems": 3,
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "required": [
+          "playerIds"
+        ]
+      }
+    }
+  }
+}
