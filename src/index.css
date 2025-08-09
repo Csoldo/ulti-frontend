@@ -11,58 +11,142 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Custom CSS Variables for Ulti Game Theme */
+  --primary-color: #646cff;
+  --primary-hover: #535bf2;
+  --secondary-color: #1a1a1a;
+  --background-light: #ffffff;
+  --text-light: #213547;
+  --text-dark: rgba(255, 255, 255, 0.87);
+  --border-color: #ccc;
+  --border-radius: 8px;
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 1.5rem;
+  --max-width-mobile: 400px;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--primary-color);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--primary-hover);
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--secondary-color);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 2.5em;
   line-height: 1.1;
+  margin: 0 0 var(--spacing-large) 0;
+}
+
+h2 {
+  font-size: 2em;
+  line-height: 1.2;
+  margin: 0 0 var(--spacing-medium) 0;
 }
 
 button {
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  padding: 0.75em 1.5em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--primary-color);
+  color: white;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.25s ease;
+  min-height: 44px; /* Accessibility: minimum touch target */
 }
+
 button:hover {
-  border-color: #646cff;
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
 }
+
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+input {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  padding: 0.75em;
+  font-size: 1em;
+  font-family: inherit;
+  background-color: transparent;
+  color: inherit;
+  transition: border-color 0.25s ease;
+  min-height: 44px; /* Accessibility: minimum touch target */
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2em;
+  }
+  
+  h2 {
+    font-size: 1.5em;
+  }
+  
+  button, input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--text-light);
+    background-color: var(--background-light);
+    --secondary-color: #f9f9f9;
+    --border-color: #ddd;
   }
-  a:hover {
-    color: #747bff;
+  
+  body {
+    background-color: var(--background-light);
   }
+  
   button {
-    background-color: #f9f9f9;
+    background-color: var(--primary-color);
+  }
+  
+  input {
+    background-color: white;
+    border-color: var(--border-color);
   }
 }
