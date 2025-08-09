@@ -79,6 +79,31 @@
         ]
       }
     },
+    "/auth/change-username": {
+      "post": {
+        "operationId": "AuthController_changeUsername",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "New username for the user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeUsernameDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/player": {
       "get": {
         "operationId": "PlayerController_getAll",
@@ -507,7 +532,7 @@
       "LoginDto": {
         "type": "object",
         "properties": {
-          "username": {
+          "email": {
             "type": "string"
           },
           "password": {
@@ -515,27 +540,41 @@
           }
         },
         "required": [
-          "username",
+          "email",
           "password"
         ]
       },
       "RegisterDto": {
         "type": "object",
         "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email address for the new user"
+          },
           "username": {
-            "type": "string"
+            "type": "string",
+            "description": "Username for the new user"
           },
           "password": {
-            "type": "string"
-          },
-          "confirmPassword": {
             "type": "string"
           }
         },
         "required": [
+          "email",
           "username",
-          "password",
-          "confirmPassword"
+          "password"
+        ]
+      },
+      "ChangeUsernameDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "New username for the user"
+          }
+        },
+        "required": [
+          "username"
         ]
       },
       "Round": {

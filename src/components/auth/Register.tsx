@@ -1,9 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import type { ApiError } from '../../types/Api';
 import styles from './Register.module.css';
+import routes from '../../utils/routes';
 
 const Register = () => {
+  const navigate = useNavigate();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
+    email: '',
     username: '',
     password: '',
     confirmPassword: ''
@@ -30,6 +36,12 @@ const Register = () => {
 
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {};
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Az email cím megadása kötelező';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Érvényes email címet adjon meg';
+    }
     
     if (!formData.username.trim()) {
       newErrors.username = 'A felhasználónév megadása kötelező';
@@ -65,22 +77,17 @@ const Register = () => {
     setIsLoading(true);
     
     try {
-      // TODO: Implement actual registration logic here
-      console.log('Registration attempt:', {
-        username: formData.username,
-        password: formData.password,
-        confirmPassword: formData.confirmPassword
-      });
+      await register(formData.email, formData.username, formData.password);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // TODO: Handle successful registration (redirect to login, auto-login, etc.)
-      alert('Sikeres regisztráció! (Ez egy helykitöltő)');
+      // Redirect to dashboard on success
+      navigate(routes.login);
       
     } catch (error) {
       console.error('Registration error:', error);
-      setErrors({ general: 'A regisztráció sikertelen. Kérjük, próbálja újra.' });
+      const apiError = error as ApiError;
+      setErrors({ 
+        general: apiError.message || 'A regisztráció sikertelen. Kérjük, próbálja újra.' 
+      });
     } finally {
       setIsLoading(false);
     }
@@ -100,6 +107,25 @@ const Register = () => {
               {errors.general}
             </div>
           )}
+          
+          <div className={styles.inputGroup}>
+            <label htmlFor="email" className={styles.label}>
+              Email cím
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+              placeholder="Adja meg az email címét"
+              autoComplete="email"
+            />
+            {errors.email && (
+              <span className={styles.inputErrorText}>{errors.email}</span>
+            )}
+          </div>
           
           <div className={styles.inputGroup}>
             <label htmlFor="username" className={styles.label}>
@@ -134,7 +160,7 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               className={`${styles.input} ${errors.password ? styles.inputError : ''}`}
-              placeholder="Hozzon létre erős jelszót"
+              placeholder="Hozzon létre egy jelszót"
               autoComplete="new-password"
             />
             {errors.password && (

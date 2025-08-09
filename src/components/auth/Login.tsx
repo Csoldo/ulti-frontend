@@ -1,10 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import type { ApiError } from '../../types/Api';
 import styles from './Login.module.css';
+import routes from '../../utils/routes';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
 
@@ -30,8 +35,10 @@ const Login = () => {
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {};
     
-    if (!formData.username.trim()) {
-      newErrors.username = 'A felhasználónév megadása kötelező';
+    if (!formData.email.trim()) {
+      newErrors.email = 'Az email cím megadása kötelező';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Érvényes email címet adjon meg';
     }
     
     if (!formData.password) {
@@ -52,19 +59,18 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      // TODO: Implement actual login logic here
-      console.log('Login attempt:', formData);
+      await login(formData.email, formData.password);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // TODO: Handle successful login (redirect, store token, etc.)
-      setFormData({ username: '', password: '' });
-      alert('Sikeres bejelentkezés! (Ez egy helykitöltő)');
+      // Clear form and redirect on success
+      setFormData({ email: '', password: '' });
+      navigate(routes.dashboard);
       
     } catch (error) {
       console.error('Login error:', error);
-      setErrors({ general: 'A bejelentkezés sikertelen. Kérjük, próbálja újra.' });
+      const apiError = error as ApiError;
+      setErrors({ 
+        general: apiError.message || 'A bejelentkezés sikertelen. Kérjük, próbálja újra.' 
+      });
     } finally {
       setIsLoading(false);
     }
@@ -85,22 +91,23 @@ const Login = () => {
             </div>
           )}
           
-          <div className={styles.inputGroup}>
-            <label htmlFor="username" className={styles.label}>
-              Felhasználónév
+                    <div className={styles.inputGroup}>
+            <label htmlFor="email" className={styles.label}>
+              Email cím
             </label>
             <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
-              className={`${styles.input} ${errors.username ? styles.inputError : ''}`}
-              placeholder="Adja meg a felhasználónevét"
-              autoComplete="username"
+              className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+              placeholder="Adja meg az email címét"
+              autoComplete="email"
+              disabled={isLoading}
             />
-            {errors.username && (
-              <span className={styles.inputErrorText}>{errors.username}</span>
+            {errors.email && (
+              <span className={styles.fieldError}>{errors.email}</span>
             )}
           </div>
           

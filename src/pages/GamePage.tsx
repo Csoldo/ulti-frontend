@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Game } from '../components/game';
 import type { Player } from '../types/Player';
+import routes from '../utils/routes';
 
 const GamePage = () => {
   const navigate = useNavigate();
@@ -11,12 +12,12 @@ const GamePage = () => {
   
   // If no players, redirect to home
   if (players.length === 0) {
-    navigate('/home');
+    navigate(routes.home);
     return null;
   }
 
   const handleEndGame = () => {
-    navigate('/home');
+    navigate(routes.home);
   };
 
   return (

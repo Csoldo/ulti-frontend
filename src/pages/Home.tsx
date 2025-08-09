@@ -4,6 +4,7 @@ import { IoPlayCircle } from 'react-icons/io5';
 import type { Player } from '../types/Player';
 import { GameSettings } from '../components/game';
 import styles from './Home.module.css';
+import routes from '../utils/routes';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Home = () => {
   const handleStartGame = (selectedPlayers: Player[]) => {
     console.log('Starting game with players:', selectedPlayers);
     // Navigate to game with players
-    navigate('/game', { state: { players: selectedPlayers } });
+    navigate(routes.game, { state: { players: selectedPlayers } });
   };
 
   return (
