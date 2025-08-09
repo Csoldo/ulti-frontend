@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoPlayCircle } from 'react-icons/io5';
 import type { Player } from '../types/Player';
 import { GameSettings } from '../components/game';
 import styles from './Home.module.css';
 
 const Home = () => {
+  const navigate = useNavigate();
   const [isGameSettingsOpen, setIsGameSettingsOpen] = useState(false);
 
   const handleStartNewGame = () => {
@@ -17,14 +19,14 @@ const Home = () => {
 
   const handleStartGame = (selectedPlayers: Player[]) => {
     console.log('Starting game with players:', selectedPlayers);
-    // TODO: Navigate to game or handle game start logic
+    // Navigate to game with players
+    navigate('/game', { state: { players: selectedPlayers } });
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Ulti</h1>
-        <p className={styles.subtitle}>Készen áll egy új játékra?</p>
       </div>
       
       <div className={styles.gameSection}>
@@ -46,11 +48,7 @@ const Home = () => {
         </div>
         <div className={styles.stat}>
           <span className={styles.statValue}>0</span>
-          <span className={styles.statLabel}>Győzelmek</span>
-        </div>
-        <div className={styles.stat}>
-          <span className={styles.statValue}>0%</span>
-          <span className={styles.statLabel}>Arány</span>
+          <span className={styles.statLabel}>Lejátszott körök</span>
         </div>
       </div>
       

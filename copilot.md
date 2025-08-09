@@ -19,7 +19,12 @@
 ### Game Flow
 - Start new game button opens fullscreen modal
 - **Game Settings Modal** - Player selection:
-  - Select existing players from list
+  - Select existing players from multiselect dropdown
   - Create new players (name only)
   - Players are associated with user account
   - Modal fills whole screen for mobile-first design
+- **Game Screen** - Active game interface:
+  - Players and their current scores
+  - Current round counter
+  - Brief summary of last round (if any)
+  - Button to register new round
