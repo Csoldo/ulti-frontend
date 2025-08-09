@@ -1,0 +1,391 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-large);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-medium);
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.subsectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #666;
+  margin: 0;
+}
+
+.instructions {
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.selectedCount {
+  background: rgba(100, 108, 255, 0.1);
+  color: var(--primary-color);
+  padding: var(--spacing-small) var(--spacing-medium);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Selected Players */
+.selectedPlayers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-small);
+}
+
+.selectedPlayer {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+}
+
+.removeButton {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: white;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* Players List - Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdownToggle {
+  background: white;
+  border: 2px solid #e1e5e9;
+  padding: var(--spacing-medium);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  min-height: 50px;
+}
+
+.dropdownToggle:hover:not(:disabled) {
+  border-color: var(--primary-color);
+}
+
+.dropdownToggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dropdownArrow {
+  transition: transform 0.3s ease;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.dropdownArrow.open {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid #e1e5e9;
+  border-top: none;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dropdownItem {
+  background: none;
+  border: none;
+  padding: var(--spacing-medium);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.dropdownItem:hover:not(:disabled) {
+  background-color: rgba(100, 108, 255, 0.05);
+}
+
+.dropdownItem.selected {
+  background-color: rgba(100, 108, 255, 0.1);
+}
+
+.dropdownItem:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Legacy styles - keep for backward compatibility */
+.playersList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-small);
+}
+
+.playerButton {
+  background: white;
+  border: 2px solid #e1e5e9;
+  padding: var(--spacing-medium);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 50px;
+}
+
+.playerButton:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  background-color: rgba(100, 108, 255, 0.05);
+}
+
+.playerButton.selected {
+  border-color: var(--primary-color);
+  background-color: rgba(100, 108, 255, 0.1);
+}
+
+.playerButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.playerName {
+  font-weight: 500;
+  color: #333;
+}
+
+.selectedIcon {
+  color: var(--primary-color);
+  font-size: 1.25rem;
+}
+
+/* Add Player */
+.addPlayerButton {
+  background: white;
+  border: 2px dashed #ccc;
+  padding: var(--spacing-medium);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-small);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #666;
+  min-height: 50px;
+}
+
+.addPlayerButton:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.addPlayerButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.addPlayerForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-small);
+}
+
+.playerNameInput {
+  padding: var(--spacing-medium);
+  border: 2px solid #e1e5e9;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  background: white;
+  color: #333;
+}
+
+.playerNameInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.addPlayerActions {
+  display: flex;
+  gap: var(--spacing-small);
+}
+
+.confirmButton {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: var(--spacing-small) var(--spacing-medium);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.cancelButton {
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  padding: var(--spacing-small) var(--spacing-medium);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  flex: 1;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-small);
+  margin-top: var(--spacing-medium);
+}
+
+.startButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: var(--spacing-medium);
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 50px;
+}
+
+.startButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.startButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.minPlayersNote {
+  text-align: center;
+  color: #888;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .sectionTitle {
+    color: #ccc;
+  }
+  
+  .subsectionTitle {
+    color: #aaa;
+  }
+  
+  .instructions {
+    color: #aaa;
+  }
+  
+  .playerButton {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .playerButton:hover:not(:disabled) {
+    background-color: rgba(139, 156, 244, 0.1);
+  }
+  
+  .playerButton.selected {
+    background-color: rgba(139, 156, 244, 0.15);
+  }
+  
+  .dropdownToggle {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #ccc;
+  }
+  
+  .dropdownMenu {
+    background: #2a2a2a;
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .dropdownItem:hover:not(:disabled) {
+    background-color: rgba(139, 156, 244, 0.1);
+  }
+  
+  .dropdownItem.selected {
+    background-color: rgba(139, 156, 244, 0.15);
+  }
+  
+  .dropdownArrow {
+    color: #aaa;
+  }
+  
+  .playerName {
+    color: #ccc;
+  }
+  
+  .addPlayerButton {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #aaa;
+  }
+  
+  .playerNameInput {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #ccc;
+  }
+  
+  .cancelButton {
+    background: rgba(255, 255, 255, 0.1);
+    color: #aaa;
+  }
+  
+  .minPlayersNote {
+    color: #777;
+  }
+}

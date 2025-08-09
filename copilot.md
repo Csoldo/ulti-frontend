@@ -17,4 +17,9 @@
   3. **Profile** (`/profile`) - User settings and info (empty for now)
 
 ### Game Flow
-- Start new game button logs to console (placeholder implementation)
+- Start new game button opens fullscreen modal
+- **Game Settings Modal** - Player selection:
+  - Select existing players from list
+  - Create new players (name only)
+  - Players are associated with user account
+  - Modal fills whole screen for mobile-first design

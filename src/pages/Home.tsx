@@ -1,9 +1,23 @@
+import { useState } from 'react';
 import { IoPlayCircle } from 'react-icons/io5';
+import type { Player } from '../types/Player';
+import { GameSettings } from '../components/game';
 import styles from './Home.module.css';
 
 const Home = () => {
+  const [isGameSettingsOpen, setIsGameSettingsOpen] = useState(false);
+
   const handleStartNewGame = () => {
-    console.log('Start new game button pressed');
+    setIsGameSettingsOpen(true);
+  };
+
+  const handleCloseGameSettings = () => {
+    setIsGameSettingsOpen(false);
+  };
+
+  const handleStartGame = (selectedPlayers: Player[]) => {
+    console.log('Starting game with players:', selectedPlayers);
+    // TODO: Navigate to game or handle game start logic
   };
 
   return (
@@ -39,6 +53,12 @@ const Home = () => {
           <span className={styles.statLabel}>Arány</span>
         </div>
       </div>
+      
+      <GameSettings
+        isOpen={isGameSettingsOpen}
+        onClose={handleCloseGameSettings}
+        onStartGame={handleStartGame}
+      />
     </div>
   );
 };
