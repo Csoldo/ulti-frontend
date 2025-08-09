@@ -6,12 +6,16 @@ import type {
   User,
 } from "../types/Api";
 import { apiClient } from "./apiClient";
+import { API_ENDPOINTS } from "./endpoints";
 
 class AuthService {
   // Login user
   async login(credentials: LoginDto): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<any>("/auth/login", credentials);
+      const response = await apiClient.post<any>(
+        API_ENDPOINTS.AUTH.LOGIN,
+        credentials
+      );
 
       // Extract token from response
       let token: string;
@@ -57,7 +61,10 @@ class AuthService {
   // Register new user
   async register(userData: RegisterDto): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<any>("/auth/register", userData);
+      const response = await apiClient.post<any>(
+        API_ENDPOINTS.AUTH.REGISTER,
+        userData
+      );
 
       // Extract token from response
       let token: string;
@@ -105,7 +112,7 @@ class AuthService {
   // Get user profile
   async getProfile(): Promise<User> {
     try {
-      return await apiClient.get<User>("/auth/profile");
+      return await apiClient.get<User>(API_ENDPOINTS.AUTH.PROFILE);
     } catch (error) {
       console.error("Failed to get profile:", error);
       throw error;
@@ -116,7 +123,7 @@ class AuthService {
   async changeUsername(usernameData: ChangeUsernameDto): Promise<User> {
     try {
       const response = await apiClient.post<User>(
-        "/auth/change-username",
+        API_ENDPOINTS.AUTH.CHANGE_USERNAME,
         usernameData
       );
 

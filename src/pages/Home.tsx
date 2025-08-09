@@ -20,7 +20,6 @@ const Home = () => {
 
   const handleStartGame = (selectedPlayers: Player[]) => {
     console.log("Starting game with players:", selectedPlayers);
-    // Navigate to game with players
     navigate(routes.game, { state: { players: selectedPlayers } });
   };
 

@@ -153,6 +153,17 @@
   cursor: not-allowed;
 }
 
+/* Loading message */
+.loadingMessage {
+  padding: var(--spacing-medium);
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  background-color: #f9f9f9;
+  border: 2px solid #e1e5e9;
+  border-radius: var(--border-radius);
+}
+
 /* Legacy styles - keep for backward compatibility */
 .playersList {
   display: flex;
@@ -318,73 +329,73 @@
   .sectionTitle {
     color: #ccc;
   }
-  
+
   .subsectionTitle {
     color: #aaa;
   }
-  
+
   .instructions {
     color: #aaa;
   }
-  
+
   .playerButton {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.2);
   }
-  
+
   .playerButton:hover:not(:disabled) {
     background-color: rgba(139, 156, 244, 0.1);
   }
-  
+
   .playerButton.selected {
     background-color: rgba(139, 156, 244, 0.15);
   }
-  
+
   .dropdownToggle {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.2);
     color: #ccc;
   }
-  
+
   .dropdownMenu {
     background: #2a2a2a;
     border-color: rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
-  
+
   .dropdownItem:hover:not(:disabled) {
     background-color: rgba(139, 156, 244, 0.1);
   }
-  
+
   .dropdownItem.selected {
     background-color: rgba(139, 156, 244, 0.15);
   }
-  
+
   .dropdownArrow {
     color: #aaa;
   }
-  
+
   .playerName {
     color: #ccc;
   }
-  
+
   .addPlayerButton {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.2);
     color: #aaa;
   }
-  
+
   .playerNameInput {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.2);
     color: #ccc;
   }
-  
+
   .cancelButton {
     background: rgba(255, 255, 255, 0.1);
     color: #aaa;
   }
-  
+
   .minPlayersNote {
     color: #777;
   }
