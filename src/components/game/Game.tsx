@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { IoAdd, IoTrophy, IoTime } from 'react-icons/io5';
-import type { GameState, Round } from '../../types/Game';
+import type { GameState, Round, NewRoundData } from '../../types/Game';
 import type { Player } from '../../types/Player';
 import ConfirmDialog from '../common/ConfirmDialog';
+import NewRound from './NewRound';
 import styles from './Game.module.css';
 
 interface GameProps {
@@ -13,6 +14,7 @@ interface GameProps {
 const Game = ({ players, onEndGame }: GameProps) => {
   // Dialog state
   const [showEndGameDialog, setShowEndGameDialog] = useState(false);
+  const [showNewRoundModal, setShowNewRoundModal] = useState(false);
 
   // Initialize game state
   const [gameState, setGameState] = useState<GameState>(() => {
@@ -53,8 +55,17 @@ const Game = ({ players, onEndGame }: GameProps) => {
   });
 
   const handleNewRound = () => {
-    console.log('Register new round button pressed');
-    // TODO: Open round registration modal
+    setShowNewRoundModal(true);
+  };
+
+  const handleNewRoundSave = (roundData: NewRoundData) => {
+    console.log('Saving new round:', roundData);
+    // TODO: Calculate scores and update game state
+    setShowNewRoundModal(false);
+  };
+
+  const handleNewRoundCancel = () => {
+    setShowNewRoundModal(false);
   };
 
   const handleEndGame = () => {
@@ -179,6 +190,18 @@ A játék állása elmentésre kerül."
         cancelText="Mégse"
         onConfirm={confirmEndGame}
       />
+
+      {/* New Round Modal */}
+      {showNewRoundModal && (
+        <div className={styles.modalOverlay}>
+          <NewRound
+            players={players}
+            roundNumber={gameState.currentRound}
+            onSave={handleNewRoundSave}
+            onCancel={handleNewRoundCancel}
+          />
+        </div>
+      )}
     </div>
   );
 };
