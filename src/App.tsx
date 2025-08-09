@@ -15,7 +15,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/game" element={<GamePage />} />
             <Route path="/" element={<DashboardLayout />}>
-              <Route index element={<Navigate to="//home" replace />} />
+              <Route index element={<Navigate to="/home" replace />} />
               <Route path="home" element={<Home />} />
               <Route path="history" element={<History />} />
               <Route path="profile" element={<Profile />} />

@@ -1,14 +1,18 @@
-import type { ReactNode } from 'react';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { authService } from '../services/authService';
-import type { User } from '../types/Api';
+import type { ReactNode } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { authService } from "../services/authService";
+import type { User } from "../types/Api";
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, username: string, password: string) => Promise<void>;
+  register: (
+    email: string,
+    username: string,
+    password: string
+  ) => Promise<void>;
   logout: () => void;
   updateUser: (user: User) => void;
 }
@@ -28,7 +32,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const initializeAuth = async () => {
       const hasToken = authService.initializeAuth();
       const storedUser = authService.getCurrentUser();
-      
+
       if (hasToken && storedUser) {
         try {
           // Verify token is still valid by getting fresh profile
@@ -40,7 +44,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           setUser(null);
         }
       }
-      
+
       setIsLoading(false);
     };
 
@@ -52,7 +56,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setUser(response.user);
   };
 
-  const register = async (email: string, username: string, password: string) => {
+  const register = async (
+    email: string,
+    username: string,
+    password: string
+  ) => {
     const response = await authService.register({ email, username, password });
     setUser(response.user);
   };
@@ -76,17 +84,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     updateUser,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

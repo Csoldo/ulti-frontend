@@ -1,21 +1,55 @@
-import type { LoginDto, RegisterDto, ChangeUsernameDto, AuthResponse, User } from '../types/Api';
-import { apiClient } from './apiClient';
+import type {
+  LoginDto,
+  RegisterDto,
+  ChangeUsernameDto,
+  AuthResponse,
+  User,
+} from "../types/Api";
+import { apiClient } from "./apiClient";
 
 class AuthService {
   // Login user
   async login(credentials: LoginDto): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
-      
-      // Store token and user data
+      const response = await apiClient.post<any>("/auth/login", credentials);
+
+      // Extract token from response
+      let token: string;
+
       if (response.access_token) {
-        apiClient.setAuthToken(response.access_token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        token = response.access_token;
+      } else if (response.accessToken) {
+        token = response.accessToken;
+      } else if (response.token) {
+        token = response.token;
+      } else {
+        throw new Error("No token found in login response");
       }
-      
-      return response;
+
+      // Set token first
+      apiClient.setAuthToken(token);
+
+      // Fetch user profile using the token
+      let user: User;
+      try {
+        user = await this.getProfile();
+      } catch (profileError) {
+        console.error(
+          "Failed to fetch user profile after login:",
+          profileError
+        );
+        throw new Error("Login successful but failed to fetch user profile");
+      }
+
+      // Store user data
+      localStorage.setItem("user", JSON.stringify(user));
+
+      return {
+        access_token: token,
+        user: user,
+      };
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
       throw error;
     }
   }
@@ -23,17 +57,47 @@ class AuthService {
   // Register new user
   async register(userData: RegisterDto): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<AuthResponse>('/auth/register', userData);
-      
-      // Store token and user data
+      const response = await apiClient.post<any>("/auth/register", userData);
+
+      // Extract token from response
+      let token: string;
+
       if (response.access_token) {
-        apiClient.setAuthToken(response.access_token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        token = response.access_token;
+      } else if (response.accessToken) {
+        token = response.accessToken;
+      } else if (response.token) {
+        token = response.token;
+      } else {
+        throw new Error("No token found in register response");
       }
-      
-      return response;
+
+      // Set token first
+      apiClient.setAuthToken(token);
+
+      // Fetch user profile using the token
+      let user: User;
+      try {
+        user = await this.getProfile();
+      } catch (profileError) {
+        console.error(
+          "Failed to fetch user profile after registration:",
+          profileError
+        );
+        throw new Error(
+          "Registration successful but failed to fetch user profile"
+        );
+      }
+
+      // Store user data
+      localStorage.setItem("user", JSON.stringify(user));
+
+      return {
+        access_token: token,
+        user: user,
+      };
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error("Registration failed:", error);
       throw error;
     }
   }
@@ -41,9 +105,9 @@ class AuthService {
   // Get user profile
   async getProfile(): Promise<User> {
     try {
-      return await apiClient.get<User>('/auth/profile');
+      return await apiClient.get<User>("/auth/profile");
     } catch (error) {
-      console.error('Failed to get profile:', error);
+      console.error("Failed to get profile:", error);
       throw error;
     }
   }
@@ -51,14 +115,17 @@ class AuthService {
   // Change username
   async changeUsername(usernameData: ChangeUsernameDto): Promise<User> {
     try {
-      const response = await apiClient.post<User>('/auth/change-username', usernameData);
-      
+      const response = await apiClient.post<User>(
+        "/auth/change-username",
+        usernameData
+      );
+
       // Update stored user data
-      localStorage.setItem('user', JSON.stringify(response));
-      
+      localStorage.setItem("user", JSON.stringify(response));
+
       return response;
     } catch (error) {
-      console.error('Failed to change username:', error);
+      console.error("Failed to change username:", error);
       throw error;
     }
   }
@@ -66,8 +133,8 @@ class AuthService {
   // Logout user
   logout(): void {
     apiClient.removeAuthToken();
-    localStorage.removeItem('user');
-    window.location.href = '/login';
+    localStorage.removeItem("user");
+    window.location.href = "/login";
   }
 
   // Check if user is authenticated
@@ -77,11 +144,16 @@ class AuthService {
 
   // Get stored user data
   getCurrentUser(): User | null {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
+    const userStr = localStorage.getItem("user");
+
+    if (userStr && userStr !== "undefined" && userStr !== "null") {
       try {
-        return JSON.parse(userStr);
-      } catch {
+        const user = JSON.parse(userStr);
+        return user;
+      } catch (error) {
+        console.error("Failed to parse stored user:", error);
+        // Clear invalid data
+        localStorage.removeItem("user");
         return null;
       }
     }

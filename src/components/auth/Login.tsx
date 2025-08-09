@@ -63,7 +63,7 @@ const Login = () => {
       
       // Clear form and redirect on success
       setFormData({ email: '', password: '' });
-      navigate(routes.dashboard);
+      navigate(routes.home);
       
     } catch (error) {
       console.error('Login error:', error);
