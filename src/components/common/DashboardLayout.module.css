@@ -1,0 +1,21 @@
+.dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+}
+
+.content {
+  flex: 1;
+  padding: var(--spacing-medium);
+  padding-bottom: calc(80px + var(--spacing-medium)); /* Space for tab bar */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .dashboard {
+    background-color: #1a1a1a;
+  }
+}
