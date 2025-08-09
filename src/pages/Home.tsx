@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IoPlayCircle } from "react-icons/io5";
 import type { Player } from "../types/Player";
 import { GameSettings } from "../components/game";
+import { gameService } from "../services/gameService";
 import styles from "./Home.module.css";
 import routes from "../utils/routes";
 
@@ -18,9 +19,17 @@ const Home = () => {
     setIsGameSettingsOpen(false);
   };
 
-  const handleStartGame = (selectedPlayers: Player[]) => {
-    console.log("Starting game with players:", selectedPlayers);
-    navigate(routes.game, { state: { players: selectedPlayers } });
+  const handleStartGame = async (selectedPlayers: Player[]) => {
+    try {
+      const playerIds = selectedPlayers.map((player) => player.id);
+      const game = await gameService.createGame({ playerIds });
+      console.log("Starting game with players:", selectedPlayers);
+      navigate(routes.game, {
+        state: { players: selectedPlayers, gameId: game.id },
+      });
+    } catch (error) {
+      console.error("Failed to create game:", error);
+    }
   };
 
   return (

@@ -8,6 +8,15 @@
   margin: 0 auto;
 }
 
+.loadingState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #666;
+  font-style: italic;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -230,46 +239,46 @@
   .header {
     border-bottom-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .title,
   .sectionTitle,
   .playerName {
     color: #ccc;
   }
-  
+
   .lastRound {
     background: rgba(139, 156, 244, 0.1);
     border-color: rgba(139, 156, 244, 0.3);
   }
-  
+
   .roundSummary {
     color: #aaa;
   }
-  
+
   .scoreChange.positive {
     background-color: rgba(16, 185, 129, 0.1);
     border-color: rgba(16, 185, 129, 0.3);
   }
-  
+
   .scoreChange.negative {
     background-color: rgba(220, 38, 38, 0.1);
     border-color: rgba(220, 38, 38, 0.3);
   }
-  
+
   .playerCard {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .playerCard:hover {
     border-color: rgba(139, 156, 244, 0.4);
     box-shadow: 0 2px 8px rgba(139, 156, 244, 0.2);
   }
-  
+
   .rankNumber {
     color: #aaa;
   }
-  
+
   .scoreLabel {
     color: #777;
   }
@@ -281,15 +290,15 @@
     padding: var(--spacing-small);
     gap: var(--spacing-medium);
   }
-  
+
   .playerCard {
     padding: var(--spacing-small) var(--spacing-medium);
   }
-  
+
   .scoreValue {
     font-size: 1.25rem;
   }
-  
+
   .newRoundButton,
   .endGameButton {
     font-size: 16px; /* Prevents zoom on iOS */
