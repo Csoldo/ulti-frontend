@@ -55,13 +55,6 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
           return;
         }
 
-        const gameRounds = rounds.filter(
-          (round) =>
-            game.playerIds.includes(round.attackerId) ||
-            game.playerIds.includes(round.defender1Id) ||
-            (round.defender2Id && game.playerIds.includes(round.defender2Id))
-        );
-
         const updatedScores: Record<number, number> = {};
         players.forEach((player) => {
           updatedScores[player.id] = 0;
@@ -69,11 +62,11 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
 
         setGameState((prev) => ({
           ...prev,
-          currentRound: gameRounds.length + 1,
-          rounds: gameRounds.map((round) => ({
+          currentRound: rounds.length + 1,
+          rounds: rounds.map((round) => ({
             id: round.id,
-            roundNumber: gameRounds.indexOf(round) + 1,
-            summary: `Kör ${gameRounds.indexOf(round) + 1} befejezve`,
+            roundNumber: rounds.indexOf(round) + 1,
+            summary: `Kör ${rounds.indexOf(round) + 1} befejezve`,
             scoreChanges: updatedScores,
             completedAt: new Date(round.createdAt),
           })),
@@ -186,7 +179,6 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
 
   return (
     <div className={styles.container}>
-      {/* Header */}
       <div className={styles.header}>
         <div className={styles.gameInfo}>
           <h1 className={styles.title}>Ulti Játék</h1>
@@ -199,37 +191,6 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
         </div>
       </div>
 
-      {/* Last Round Summary */}
-      {lastRound && (
-        <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>Utolsó forduló</h3>
-          <div className={styles.lastRound}>
-            <p className={styles.roundSummary}>{lastRound.summary}</p>
-            <div className={styles.scoreChanges}>
-              {Object.entries(lastRound.scoreChanges).map(
-                ([playerId, change]) => {
-                  const player = players.find((p) => p.id === Number(playerId));
-                  if (!player || change === 0) return null;
-
-                  return (
-                    <span
-                      key={playerId}
-                      className={`${styles.scoreChange} ${
-                        change > 0 ? styles.positive : styles.negative
-                      }`}
-                    >
-                      {player.name}: {change > 0 ? "+" : ""}
-                      {change}
-                    </span>
-                  );
-                }
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Players Scores */}
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>Állás</h3>
         <div className={styles.playersList}>
@@ -260,7 +221,35 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
         </div>
       </div>
 
-      {/* Actions */}
+      {lastRound && (
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Utolsó forduló</h3>
+          <div className={styles.lastRound}>
+            <p className={styles.roundSummary}>{lastRound.summary}</p>
+            <div className={styles.scoreChanges}>
+              {Object.entries(lastRound.scoreChanges).map(
+                ([playerId, change]) => {
+                  const player = players.find((p) => p.id === Number(playerId));
+                  if (!player || change === 0) return null;
+
+                  return (
+                    <span
+                      key={playerId}
+                      className={`${styles.scoreChange} ${
+                        change > 0 ? styles.positive : styles.negative
+                      }`}
+                    >
+                      {player.name}: {change > 0 ? "+" : ""}
+                      {change}
+                    </span>
+                  );
+                }
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={styles.actions}>
         <button className={styles.newRoundButton} onClick={handleNewRound}>
           <IoAdd className={styles.buttonIcon} />

@@ -1,8 +1,9 @@
-import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import type { ApiError } from '../types/Api';
+import axios, { type AxiosInstance, type AxiosResponse } from "axios";
+import type { ApiError } from "../types/Api";
 
 // API base configuration
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 class ApiClient {
   private client: AxiosInstance;
@@ -11,13 +12,13 @@ class ApiClient {
     this.client = axios.create({
       baseURL: API_BASE_URL,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
     // Request interceptor to add auth token
     this.client.interceptors.request.use((config) => {
-      const token = localStorage.getItem('access_token');
+      const token = localStorage.getItem("access_token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -29,16 +30,21 @@ class ApiClient {
       (response: AxiosResponse) => response,
       (error) => {
         const apiError: ApiError = {
-          message: error.response?.data?.message || error.message || 'Unknown error occurred',
+          message:
+            error.response?.data?.message ||
+            error.message ||
+            "Unknown error occurred",
           statusCode: error.response?.status || 500,
           error: error.response?.data?.error,
         };
 
         // Redirect to login on 401 Unauthorized
         if (error.response?.status === 401) {
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('user');
-          window.location.href = '/login';
+          if (window.location.pathname !== "/login") {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("user");
+            window.location.href = "/login";
+          }
         }
 
         return Promise.reject(apiError);
@@ -69,17 +75,17 @@ class ApiClient {
 
   // Utility methods
   setAuthToken(token: string) {
-    localStorage.setItem('access_token', token);
+    localStorage.setItem("access_token", token);
     this.client.defaults.headers.Authorization = `Bearer ${token}`;
   }
 
   removeAuthToken() {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem("access_token");
     delete this.client.defaults.headers.Authorization;
   }
 
   getStoredToken(): string | null {
-    return localStorage.getItem('access_token');
+    return localStorage.getItem("access_token");
   }
 }
 

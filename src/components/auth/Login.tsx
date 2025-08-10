@@ -1,76 +1,79 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import type { ApiError } from '../../types/Api';
-import styles from './Login.module.css';
-import routes from '../../utils/routes';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import type { ApiError } from "../../types/Api";
+import styles from "./Login.module.css";
+import routes from "../../utils/routes";
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
 
   const validateForm = () => {
-    const newErrors: {[key: string]: string} = {};
-    
+    const newErrors: { [key: string]: string } = {};
+
     if (!formData.email.trim()) {
-      newErrors.email = 'Az email cím megadása kötelező';
+      newErrors.email = "Az email cím megadása kötelező";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Érvényes email címet adjon meg';
+      newErrors.email = "Érvényes email címet adjon meg";
     }
-    
+
     if (!formData.password) {
-      newErrors.password = 'A jelszó megadása kötelező';
+      newErrors.password = "A jelszó megadása kötelező";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
       await login(formData.email, formData.password);
-      
-      // Clear form and redirect on success
-      setFormData({ email: '', password: '' });
+      setFormData({ email: "", password: "" });
       navigate(routes.home);
-      
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       const apiError = error as ApiError;
-      setErrors({ 
-        general: apiError.message || 'A bejelentkezés sikertelen. Kérjük, próbálja újra.' 
-      });
+      if (apiError.statusCode === 401) {
+        setErrors({
+          general: "Hibás email vagy jelszó. Kérjük, próbálja újra.",
+        });
+      } else {
+        setErrors({
+          general: "A bejelentkezés sikertelen. Kérjük, próbálja újra.",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -83,15 +86,13 @@ const Login = () => {
           <h1 className={styles.title}>Üdvözöljük az Ulti játékban</h1>
           <p className={styles.subtitle}>Jelentkezzen be a fiókjába</p>
         </div>
-        
+
         <form onSubmit={handleSubmit} className={styles.form}>
           {errors.general && (
-            <div className={styles.errorMessage}>
-              {errors.general}
-            </div>
+            <div className={styles.errorMessage}>{errors.general}</div>
           )}
-          
-                    <div className={styles.inputGroup}>
+
+          <div className={styles.inputGroup}>
             <label htmlFor="email" className={styles.label}>
               Email cím
             </label>
@@ -101,7 +102,9 @@ const Login = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+              className={`${styles.input} ${
+                errors.email ? styles.inputError : ""
+              }`}
               placeholder="Adja meg az email címét"
               autoComplete="email"
               disabled={isLoading}
@@ -110,7 +113,7 @@ const Login = () => {
               <span className={styles.fieldError}>{errors.email}</span>
             )}
           </div>
-          
+
           <div className={styles.inputGroup}>
             <label htmlFor="password" className={styles.label}>
               Jelszó
@@ -121,7 +124,9 @@ const Login = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className={`${styles.input} ${errors.password ? styles.inputError : ''}`}
+              className={`${styles.input} ${
+                errors.password ? styles.inputError : ""
+              }`}
               placeholder="Adja meg a jelszavát"
               autoComplete="current-password"
             />
@@ -129,18 +134,18 @@ const Login = () => {
               <span className={styles.inputErrorText}>{errors.password}</span>
             )}
           </div>
-          
+
           <button
             type="submit"
             disabled={isLoading}
             className={styles.submitButton}
           >
-            {isLoading ? 'Bejelentkezés...' : 'Bejelentkezés'}
+            {isLoading ? "Bejelentkezés..." : "Bejelentkezés"}
           </button>
-          
+
           <div className={styles.footer}>
             <p className={styles.signUpText}>
-              Nincs még fiókja?{' '}
+              Nincs még fiókja?{" "}
               <Link to="/register" className={styles.signUpLink}>
                 Regisztráljon itt
               </Link>

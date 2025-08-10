@@ -6,6 +6,7 @@ import { GameSettings } from "../components/game";
 import { gameService } from "../services/gameService";
 import styles from "./Home.module.css";
 import routes from "../utils/routes";
+import type { ApiError } from "../types/Api";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -22,13 +23,20 @@ const Home = () => {
   const handleStartGame = async (selectedPlayers: Player[]) => {
     try {
       const playerIds = selectedPlayers.map((player) => player.id);
-      const game = await gameService.createGame({ playerIds });
+      await gameService.createGame({ playerIds });
       console.log("Starting game with players:", selectedPlayers);
-      navigate(routes.game, {
-        state: { players: selectedPlayers, gameId: game.id },
-      });
+      navigate(routes.game);
     } catch (error) {
       console.error("Failed to create game:", error);
+      const apiError = error as ApiError;
+      if (
+        apiError.statusCode === 400 &&
+        apiError.message === "User cannot create more than 1 active games"
+      ) {
+        navigate(routes.game);
+      } else {
+        alert("Hiba a játék indításakor: " + apiError.message);
+      }
     }
   };
 

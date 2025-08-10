@@ -33,7 +33,6 @@ const GameSettings = ({ isOpen, onClose, onStartGame }: GameSettingsProps) => {
       setExistingPlayers(players);
     } catch (error) {
       console.error("Failed to fetch players:", error);
-      // Fallback to empty array or show error message
       setExistingPlayers([]);
     } finally {
       setIsLoadingPlayers(false);

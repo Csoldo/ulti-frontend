@@ -5,9 +5,15 @@ export interface CreateGameDto {
   playerIds: number[];
 }
 
+interface IPlayer {
+  id: number;
+  name: string;
+  score: number;
+}
+
 export interface Game {
   id: number;
-  playerIds: number[];
+  players: IPlayer[];
   status: string;
   createdAt: string;
   updatedAt: string;
