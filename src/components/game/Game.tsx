@@ -178,90 +178,96 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.gameInfo}>
-          <h1 className={styles.title}>Ulti Játék</h1>
-          <div className={styles.roundInfo}>
-            <IoTime className={styles.roundIcon} />
-            <span className={styles.roundText}>
-              {gameState.currentRound}. forduló
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>Állás</h3>
-        <div className={styles.playersList}>
-          {players
-            .sort(
-              (a, b) =>
-                gameState.playerScores[b.id] - gameState.playerScores[a.id]
-            )
-            .map((player, index) => (
-              <div key={player.id} className={styles.playerCard}>
-                <div className={styles.playerRank}>
-                  {index === 0 && gameState.playerScores[player.id] > 0 && (
-                    <IoTrophy className={styles.trophyIcon} />
-                  )}
-                  <span className={styles.rankNumber}>#{index + 1}</span>
-                </div>
-                <div className={styles.playerInfo}>
-                  <span className={styles.playerName}>{player.name}</span>
-                </div>
-                <div className={styles.playerScore}>
-                  <span className={styles.scoreValue}>
-                    {gameState.playerScores[player.id]}
-                  </span>
-                  <span className={styles.scoreLabel}>pont</span>
-                </div>
+    <>
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <div className={styles.header}>
+            <div className={styles.gameInfo}>
+              <h1 className={styles.title}>Ulti Játék</h1>
+              <div className={styles.roundInfo}>
+                <IoTime className={styles.roundIcon} />
+                <span className={styles.roundText}>
+                  {gameState.currentRound}. forduló
+                </span>
               </div>
-            ))}
-        </div>
-      </div>
+            </div>
+          </div>
 
-      {lastRound && (
-        <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>Utolsó forduló</h3>
-          <div className={styles.lastRound}>
-            <p className={styles.roundSummary}>{lastRound.summary}</p>
-            <div className={styles.scoreChanges}>
-              {Object.entries(lastRound.scoreChanges).map(
-                ([playerId, change]) => {
-                  const player = players.find((p) => p.id === Number(playerId));
-                  if (!player || change === 0) return null;
-
-                  return (
-                    <span
-                      key={playerId}
-                      className={`${styles.scoreChange} ${
-                        change > 0 ? styles.positive : styles.negative
-                      }`}
-                    >
-                      {player.name}: {change > 0 ? "+" : ""}
-                      {change}
-                    </span>
-                  );
-                }
-              )}
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>Állás</h3>
+            <div className={styles.playersList}>
+              {players
+                .sort(
+                  (a, b) =>
+                    gameState.playerScores[b.id] - gameState.playerScores[a.id]
+                )
+                .map((player, index) => (
+                  <div key={player.id} className={styles.playerCard}>
+                    <div className={styles.playerRank}>
+                      {index === 0 && gameState.playerScores[player.id] > 0 && (
+                        <IoTrophy className={styles.trophyIcon} />
+                      )}
+                      <span className={styles.rankNumber}>#{index + 1}</span>
+                    </div>
+                    <div className={styles.playerInfo}>
+                      <span className={styles.playerName}>{player.name}</span>
+                    </div>
+                    <div className={styles.playerScore}>
+                      <span className={styles.scoreValue}>
+                        {gameState.playerScores[player.id]}
+                      </span>
+                      <span className={styles.scoreLabel}>pont</span>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
-      )}
 
-      <div className={styles.actions}>
-        <button className={styles.newRoundButton} onClick={handleNewRound}>
-          <IoAdd className={styles.buttonIcon} />
-          <span>Új forduló rögzítése</span>
-        </button>
+        <div className={styles.bottomSection}>
+          {lastRound && (
+            <div className={styles.lastRoundRow}>
+              <div className={styles.lastRoundContent}>
+                <p className={styles.roundSummary}>{lastRound.summary}</p>
+                <div className={styles.scoreChanges}>
+                  {Object.entries(lastRound.scoreChanges).map(
+                    ([playerId, change]) => {
+                      const player = players.find(
+                        (p) => p.id === Number(playerId)
+                      );
+                      if (!player || change === 0) return null;
 
-        <button className={styles.endGameButton} onClick={handleEndGame}>
-          Játék befejezése
-        </button>
+                      return (
+                        <span
+                          key={playerId}
+                          className={`${styles.scoreChange} ${
+                            change > 0 ? styles.positive : styles.negative
+                          }`}
+                        >
+                          {player.name}: {change > 0 ? "+" : ""}
+                          {change}
+                        </span>
+                      );
+                    }
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className={styles.actions}>
+            <button className={styles.newRoundButton} onClick={handleNewRound}>
+              <IoAdd className={styles.buttonIcon} />
+              <span>Új kör</span>
+            </button>
+
+            <button className={styles.endGameButton} onClick={handleEndGame}>
+              Játék befejezése
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* End Game Confirmation Dialog */}
       <ConfirmDialog
         open={showEndGameDialog}
         onOpenChange={setShowEndGameDialog}
@@ -274,7 +280,6 @@ A játék állása elmentésre kerül."
         onConfirm={confirmEndGame}
       />
 
-      {/* New Round Modal */}
       {showNewRoundModal && (
         <div className={styles.modalOverlay}>
           <NewRound
@@ -285,7 +290,7 @@ A játék állása elmentésre kerül."
           />
         </div>
       )}
-    </div>
+    </>
   );
 };
 

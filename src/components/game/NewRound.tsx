@@ -1,8 +1,13 @@
-import { useState } from 'react';
-import { IoChevronDown, IoCheckmark, IoClose, IoSave } from 'react-icons/io5';
-import type { Player } from '../../types/Player';
-import type { LicitCombination, Licit, NewRoundData, SilentLicit } from '../../types/Game';
-import styles from './NewRound.module.css';
+import { useState } from "react";
+import { IoChevronDown, IoCheckmark, IoClose, IoSave } from "react-icons/io5";
+import type { Player } from "../../types/Player";
+import type {
+  LicitCombination,
+  Licit,
+  NewRoundData,
+  SilentLicit,
+} from "../../types/Game";
+import styles from "./NewRound.module.css";
 
 interface NewRoundProps {
   players: Player[];
@@ -14,53 +19,56 @@ interface NewRoundProps {
 // Mock data for licit combinations
 const LICIT_COMBINATIONS: LicitCombination[] = [
   {
-    id: 'kis-ulti',
-    name: 'Kis Ulti',
-    description: 'Ulti + egy másik licit',
+    id: "kis-ulti",
+    name: "Kis Ulti",
+    description: "Ulti + egy másik licit",
     licits: [
-      { id: 'ulti', name: 'Ulti', baseValue: 10 },
-      { id: 'xx', name: 'XX', baseValue: 2 },
-    ]
+      { id: "ulti", name: "Ulti", baseValue: 10 },
+      { id: "xx", name: "XX", baseValue: 2 },
+    ],
   },
   {
-    id: 'nagy-ulti',
-    name: 'Nagy Ulti', 
-    description: 'Ulti + Betli + XX',
+    id: "nagy-ulti",
+    name: "Nagy Ulti",
+    description: "Ulti + Betli + XX",
     licits: [
-      { id: 'ulti', name: 'Ulti', baseValue: 10 },
-      { id: 'betli', name: 'Betli', baseValue: 5 },
-      { id: 'xx', name: 'XX', baseValue: 2 },
-    ]
+      { id: "ulti", name: "Ulti", baseValue: 10 },
+      { id: "betli", name: "Betli", baseValue: 5 },
+      { id: "xx", name: "XX", baseValue: 2 },
+    ],
   },
   {
-    id: 'szuper-ulti',
-    name: 'Szuper Ulti',
-    description: 'Ulti + Betli + Durchmars + XX',
+    id: "szuper-ulti",
+    name: "Szuper Ulti",
+    description: "Ulti + Betli + Durchmars + XX",
     licits: [
-      { id: 'ulti', name: 'Ulti', baseValue: 10 },
-      { id: 'betli', name: 'Betli', baseValue: 5 },
-      { id: 'durchmars', name: 'Durchmars', baseValue: 8 },
-      { id: 'xx', name: 'XX', baseValue: 2 },
-    ]
+      { id: "ulti", name: "Ulti", baseValue: 10 },
+      { id: "betli", name: "Betli", baseValue: 5 },
+      { id: "durchmars", name: "Durchmars", baseValue: 8 },
+      { id: "xx", name: "XX", baseValue: 2 },
+    ],
   },
   {
-    id: 'egyszerű',
-    name: 'Egyszerű játék',
-    description: 'Csak alapjáték',
-    licits: [
-      { id: 'alap', name: 'Alapjáték', baseValue: 1 },
-    ]
-  }
+    id: "egyszerű",
+    name: "Egyszerű játék",
+    description: "Csak alapjáték",
+    licits: [{ id: "alap", name: "Alapjáték", baseValue: 1 }],
+  },
 ];
 
-const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => {
+const NewRound = ({
+  players,
+  roundNumber,
+  onSave,
+  onCancel,
+}: NewRoundProps) => {
   const [roundData, setRoundData] = useState<NewRoundData>({
     licitCombination: null,
     attackerId: null,
     defenderIds: [],
     wonLicits: [],
     contras: [],
-    silentLicits: []
+    silentLicits: [],
   });
 
   const [showLicitDropdown, setShowLicitDropdown] = useState(false);
@@ -68,71 +76,76 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
   const [showDefenderDropdown, setShowDefenderDropdown] = useState(false);
 
   const handleLicitCombinationSelect = (combination: LicitCombination) => {
-    setRoundData(prev => ({
+    setRoundData((prev) => ({
       ...prev,
       licitCombination: combination,
       wonLicits: [],
-      contras: []
+      contras: [],
     }));
     setShowLicitDropdown(false);
   };
 
   const handleAttackerSelect = (playerId: number) => {
-    setRoundData(prev => ({
+    setRoundData((prev) => ({
       ...prev,
       attackerId: playerId,
-      defenderIds: prev.defenderIds.filter(id => id !== playerId)
+      defenderIds: prev.defenderIds.filter((id) => id !== playerId),
     }));
     setShowAttackerDropdown(false);
   };
 
   const handleDefenderToggle = (playerId: number) => {
     if (playerId === roundData.attackerId) return;
-    
-    setRoundData(prev => ({
+
+    setRoundData((prev) => ({
       ...prev,
       defenderIds: prev.defenderIds.includes(playerId)
-        ? prev.defenderIds.filter(id => id !== playerId)
-        : [...prev.defenderIds, playerId]
+        ? prev.defenderIds.filter((id) => id !== playerId)
+        : [...prev.defenderIds, playerId],
     }));
   };
 
   const handleWonLicitToggle = (licitId: string) => {
-    setRoundData(prev => ({
+    setRoundData((prev) => ({
       ...prev,
       wonLicits: prev.wonLicits.includes(licitId)
-        ? prev.wonLicits.filter(id => id !== licitId)
-        : [...prev.wonLicits, licitId]
+        ? prev.wonLicits.filter((id) => id !== licitId)
+        : [...prev.wonLicits, licitId],
     }));
   };
 
   const handleContraToggle = (licitId: string) => {
-    setRoundData(prev => ({
+    setRoundData((prev) => ({
       ...prev,
       contras: prev.contras.includes(licitId)
-        ? prev.contras.filter(id => id !== licitId)
-        : [...prev.contras, licitId]
+        ? prev.contras.filter((id) => id !== licitId)
+        : [...prev.contras, licitId],
     }));
   };
 
   const handleSilentLicitToggle = (playerId: number) => {
-    setRoundData(prev => ({
+    setRoundData((prev) => ({
       ...prev,
-      silentLicits: prev.silentLicits.some(sl => sl.playerId === playerId)
-        ? prev.silentLicits.filter(sl => sl.playerId !== playerId)
-        : [...prev.silentLicits, {
-            id: `csendes-100-${playerId}`,
-            name: 'Csendes 100',
-            playerId,
-            value: 10
-          }]
+      silentLicits: prev.silentLicits.some((sl) => sl.playerId === playerId)
+        ? prev.silentLicits.filter((sl) => sl.playerId !== playerId)
+        : [
+            ...prev.silentLicits,
+            {
+              id: `csendes-100-${playerId}`,
+              name: "Csendes 100",
+              playerId,
+              value: 10,
+            },
+          ],
     }));
   };
 
   const canSave = () => {
-    return roundData.licitCombination && 
-           roundData.attackerId !== null && 
-           roundData.defenderIds.length >= 2;
+    return (
+      roundData.licitCombination &&
+      roundData.attackerId !== null &&
+      roundData.defenderIds.length >= 2
+    );
   };
 
   const handleSave = () => {
@@ -142,13 +155,13 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
   };
 
   const getPlayerName = (playerId: number) => {
-    return players.find(p => p.id === playerId)?.name || '';
+    return players.find((p) => p.id === playerId)?.name || "";
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2 className={styles.title}>{roundNumber}. forduló rögzítése</h2>
+        <h2 className={styles.title}>{roundNumber}. kör</h2>
         <button className={styles.closeButton} onClick={onCancel}>
           <IoClose />
         </button>
@@ -157,29 +170,37 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
       <div className={styles.content}>
         {/* Licit Combination Selection */}
         <div className={styles.section}>
-          <label className={styles.label}>Licit kombináció</label>
+          <label className={styles.label}>Licit</label>
           <div className={styles.dropdown}>
-            <button 
+            <button
               className={styles.dropdownTrigger}
               onClick={() => setShowLicitDropdown(!showLicitDropdown)}
             >
               <span>
-                {roundData.licitCombination?.name || 'Válassz licit kombinációt'}
+                {roundData.licitCombination?.name || "Válassz licitet"}
               </span>
-              <IoChevronDown className={`${styles.chevron} ${showLicitDropdown ? styles.open : ''}`} />
+              <IoChevronDown
+                className={`${styles.chevron} ${
+                  showLicitDropdown ? styles.open : ""
+                }`}
+              />
             </button>
             {showLicitDropdown && (
               <div className={styles.dropdownContent}>
-                {LICIT_COMBINATIONS.map(combination => (
+                {LICIT_COMBINATIONS.map((combination) => (
                   <button
                     key={combination.id}
                     className={styles.dropdownItem}
                     onClick={() => handleLicitCombinationSelect(combination)}
                   >
                     <div>
-                      <div className={styles.combinationName}>{combination.name}</div>
+                      <div className={styles.combinationName}>
+                        {combination.name}
+                      </div>
                       {combination.description && (
-                        <div className={styles.combinationDesc}>{combination.description}</div>
+                        <div className={styles.combinationDesc}>
+                          {combination.description}
+                        </div>
                       )}
                     </div>
                   </button>
@@ -189,23 +210,28 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
           </div>
         </div>
 
-        {/* Attacker Selection */}
         {roundData.licitCombination && (
           <div className={styles.section}>
             <label className={styles.label}>Támadó</label>
             <div className={styles.dropdown}>
-              <button 
+              <button
                 className={styles.dropdownTrigger}
                 onClick={() => setShowAttackerDropdown(!showAttackerDropdown)}
               >
                 <span>
-                  {roundData.attackerId ? getPlayerName(roundData.attackerId) : 'Válassz támadót'}
+                  {roundData.attackerId
+                    ? getPlayerName(roundData.attackerId)
+                    : "Válassz támadót"}
                 </span>
-                <IoChevronDown className={`${styles.chevron} ${showAttackerDropdown ? styles.open : ''}`} />
+                <IoChevronDown
+                  className={`${styles.chevron} ${
+                    showAttackerDropdown ? styles.open : ""
+                  }`}
+                />
               </button>
               {showAttackerDropdown && (
                 <div className={styles.dropdownContent}>
-                  {players.map(player => (
+                  {players.map((player) => (
                     <button
                       key={player.id}
                       className={styles.dropdownItem}
@@ -220,18 +246,19 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
           </div>
         )}
 
-        {/* Defender Selection */}
-        {roundData.attackerId && (
+        {roundData.attackerId && players.length > 3 && (
           <div className={styles.section}>
-            <label className={styles.label}>Védők (min. 2 fő)</label>
+            <label className={styles.label}>Védők</label>
             <div className={styles.playerList}>
               {players
-                .filter(player => player.id !== roundData.attackerId)
-                .map(player => (
+                .filter((player) => player.id !== roundData.attackerId)
+                .map((player) => (
                   <button
                     key={player.id}
                     className={`${styles.playerButton} ${
-                      roundData.defenderIds.includes(player.id) ? styles.selected : ''
+                      roundData.defenderIds.includes(player.id)
+                        ? styles.selected
+                        : ""
                     }`}
                     onClick={() => handleDefenderToggle(player.id)}
                   >
@@ -245,16 +272,17 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
           </div>
         )}
 
-        {/* Won Licits Selection */}
         {roundData.defenderIds.length >= 2 && (
           <div className={styles.section}>
             <label className={styles.label}>Megnyert licitek</label>
             <div className={styles.licitList}>
-              {roundData.licitCombination?.licits.map(licit => (
+              {roundData.licitCombination?.licits.map((licit) => (
                 <button
                   key={licit.id}
                   className={`${styles.licitButton} ${
-                    roundData.wonLicits.includes(licit.id) ? styles.selected : ''
+                    roundData.wonLicits.includes(licit.id)
+                      ? styles.selected
+                      : ""
                   }`}
                   onClick={() => handleWonLicitToggle(licit.id)}
                 >
@@ -263,7 +291,9 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
                   )}
                   <div>
                     <div className={styles.licitName}>{licit.name}</div>
-                    <div className={styles.licitValue}>{licit.baseValue} pont</div>
+                    <div className={styles.licitValue}>
+                      {licit.baseValue} pont
+                    </div>
                   </div>
                 </button>
               ))}
@@ -271,18 +301,19 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
           </div>
         )}
 
-        {/* Contras */}
         {roundData.wonLicits.length > 0 && (
           <div className={styles.section}>
             <label className={styles.label}>Kontrák</label>
             <div className={styles.licitList}>
               {roundData.licitCombination?.licits
-                .filter(licit => roundData.wonLicits.includes(licit.id))
-                .map(licit => (
+                .filter((licit) => roundData.wonLicits.includes(licit.id))
+                .map((licit) => (
                   <button
                     key={licit.id}
                     className={`${styles.licitButton} ${
-                      roundData.contras.includes(licit.id) ? styles.selected : ''
+                      roundData.contras.includes(licit.id)
+                        ? styles.selected
+                        : ""
                     }`}
                     onClick={() => handleContraToggle(licit.id)}
                   >
@@ -290,8 +321,12 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
                       <IoCheckmark className={styles.checkIcon} />
                     )}
                     <div>
-                      <div className={styles.licitName}>{licit.name} kontra</div>
-                      <div className={styles.licitValue}>+{licit.baseValue} pont</div>
+                      <div className={styles.licitName}>
+                        {licit.name} kontra
+                      </div>
+                      <div className={styles.licitValue}>
+                        +{licit.baseValue} pont
+                      </div>
                     </div>
                   </button>
                 ))}
@@ -303,17 +338,19 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
         <div className={styles.section}>
           <label className={styles.label}>Csendes licitek</label>
           <div className={styles.playerList}>
-            {players.map(player => (
+            {players.map((player) => (
               <button
                 key={player.id}
                 className={`${styles.playerButton} ${
-                  roundData.silentLicits.some(sl => sl.playerId === player.id) ? styles.selected : ''
+                  roundData.silentLicits.some((sl) => sl.playerId === player.id)
+                    ? styles.selected
+                    : ""
                 }`}
                 onClick={() => handleSilentLicitToggle(player.id)}
               >
-                {roundData.silentLicits.some(sl => sl.playerId === player.id) && (
-                  <IoCheckmark className={styles.checkIcon} />
-                )}
+                {roundData.silentLicits.some(
+                  (sl) => sl.playerId === player.id
+                ) && <IoCheckmark className={styles.checkIcon} />}
                 {player.name} - Csendes 100
               </button>
             ))}
@@ -323,14 +360,13 @@ const NewRound = ({ players, roundNumber, onSave, onCancel }: NewRoundProps) => 
 
       {/* Actions */}
       <div className={styles.actions}>
-        <button 
-          className={styles.cancelButton}
-          onClick={onCancel}
-        >
+        <button className={styles.cancelButton} onClick={onCancel}>
           Mégse
         </button>
-        <button 
-          className={`${styles.saveButton} ${!canSave() ? styles.disabled : ''}`}
+        <button
+          className={`${styles.saveButton} ${
+            !canSave() ? styles.disabled : ""
+          }`}
           onClick={handleSave}
           disabled={!canSave()}
         >
