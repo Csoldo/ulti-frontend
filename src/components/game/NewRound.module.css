@@ -1,10 +1,12 @@
 /* Container */
 .container {
-  background: linear-gradient(135deg, rgba(45, 45, 65, 0.95), rgba(25, 25, 45, 0.98));
+  background: linear-gradient(
+    135deg,
+    rgba(45, 45, 65, 0.95),
+    rgba(25, 25, 45, 0.98)
+  );
   border-radius: 16px;
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   color: #ffffff;
   max-height: 90vh;
@@ -138,6 +140,14 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
+.redLicit {
+  color: #ff6b6b !important;
+}
+
+.redLicit .licitName {
+  color: #ff6b6b;
+}
+
 .combinationName {
   font-weight: 500;
   margin-bottom: 2px;
@@ -181,7 +191,11 @@
 
 .playerButton.selected,
 .licitButton.selected {
-  background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(39, 174, 96, 0.3));
+  background: linear-gradient(
+    135deg,
+    rgba(46, 204, 113, 0.2),
+    rgba(39, 174, 96, 0.3)
+  );
   border-color: rgba(46, 204, 113, 0.5);
 }
 
@@ -266,20 +280,20 @@
     margin: 16px;
     max-height: calc(100vh - 32px);
   }
-  
+
   .header {
     padding: 20px 20px 0 20px;
   }
-  
+
   .content {
     padding: 0 20px 16px 20px;
   }
-  
+
   .actions {
     flex-direction: column;
     padding: 16px 20px 20px 20px;
   }
-  
+
   .cancelButton,
   .saveButton {
     width: 100%;

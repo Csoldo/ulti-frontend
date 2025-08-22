@@ -64,6 +64,32 @@
   transform: translateY(-2px) scale(1.02);
 }
 
+.continueGameButton {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #65f789 0%, #86f148 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-small);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.continueGameButton:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+}
+
+.continueGameButton:active {
+  transform: translateY(-2px) scale(1.02);
+}
+
 .buttonIcon {
   font-size: 3rem;
   display: flex;
@@ -111,28 +137,28 @@
   .title {
     font-size: 2.5rem;
   }
-  
+
   .startGameButton {
     width: 180px;
     height: 180px;
   }
-  
+
   .buttonIcon {
     font-size: 2.5rem;
   }
-  
+
   .buttonText {
     font-size: 0.9rem;
   }
-  
+
   .quickStats {
     gap: var(--spacing-medium);
   }
-  
+
   .statValue {
     font-size: 1.25rem;
   }
-  
+
   .statLabel {
     font-size: 0.75rem;
   }
@@ -146,11 +172,11 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
   .subtitle {
     color: #aaa;
   }
-  
+
   .statLabel {
     color: #999;
   }

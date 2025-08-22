@@ -1,10 +1,9 @@
-import type { Player } from './Player';
+import type { Player } from "./Player";
 
 export interface GameState {
   id: number;
   players: Player[];
   currentRound: number;
-  playerScores: Record<number, number>; // playerId -> score
   rounds: Round[];
   isActive: boolean;
   createdAt: Date;
@@ -32,19 +31,23 @@ export interface LicitCombination {
   description?: string;
 }
 
-// New round data
 export interface NewRoundData {
-  licitCombination: LicitCombination | null;
+  bidId: number | null;
   attackerId: number | null;
-  defenderIds: number[];
-  wonLicits: string[]; // licit IDs
-  contras: string[]; // licit IDs with contra
-  silentLicits: SilentLicit[];
+  defender1Id: number | null;
+  defender2Id: number | null;
+  attackerWonIds: number[];
+  silentBids: SilentBidData[];
+  contras: number[];
 }
 
-export interface SilentLicit {
-  id: string;
-  name: string;
-  playerId: number;
-  value: number;
+export interface SilentBidData {
+  silentBidId: number;
+  attackerWon: boolean;
+}
+
+export interface Contra {
+  bidTypeId: number;
+  defender1Multiplier: number;
+  defender2Multiplier: number;
 }

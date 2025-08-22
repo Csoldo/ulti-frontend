@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoPlayCircle } from "react-icons/io5";
 import type { Player } from "../types/Player";
@@ -11,6 +11,22 @@ import type { ApiError } from "../types/Api";
 const Home = () => {
   const navigate = useNavigate();
   const [isGameSettingsOpen, setIsGameSettingsOpen] = useState(false);
+  const [gameAlreadyActive, setGameAlreadyActive] = useState(false);
+
+  useEffect(() => {
+    const fetchActiveGame = async () => {
+      console.log("Checking for active game...");
+      try {
+        const activeGame = await gameService.getActiveGame();
+        if (activeGame) {
+          setGameAlreadyActive(true);
+        }
+      } catch (error) {
+        console.error("Failed to fetch active game:", error);
+      }
+    };
+    fetchActiveGame();
+  }, []);
 
   const handleStartNewGame = () => {
     setIsGameSettingsOpen(true);
@@ -47,12 +63,28 @@ const Home = () => {
       </div>
 
       <div className={styles.gameSection}>
-        <button className={styles.startGameButton} onClick={handleStartNewGame}>
-          <span className={styles.buttonIcon}>
-            <IoPlayCircle />
-          </span>
-          <span className={styles.buttonText}>Új játék kezdése</span>
-        </button>
+        {gameAlreadyActive && (
+          <button
+            className={styles.continueGameButton}
+            onClick={() => navigate(routes.game)}
+          >
+            <span className={styles.buttonIcon}>
+              <IoPlayCircle />
+            </span>
+            <span className={styles.buttonText}>Játék folytatása</span>
+          </button>
+        )}
+        {!gameAlreadyActive && (
+          <button
+            className={styles.startGameButton}
+            onClick={handleStartNewGame}
+          >
+            <span className={styles.buttonIcon}>
+              <IoPlayCircle />
+            </span>
+            <span className={styles.buttonText}>Új játék kezdése</span>
+          </button>
+        )}
       </div>
 
       <div className={styles.quickStats}>

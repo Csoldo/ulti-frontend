@@ -4,6 +4,7 @@ import type { GameState, Round, NewRoundData } from "../../types/Game";
 import type { Player } from "../../types/Player";
 import { gameService } from "../../services/gameService";
 import { roundService } from "../../services/roundService";
+import { BIDS } from "../../data/gameData";
 import ConfirmDialog from "../common/ConfirmDialog";
 import NewRound from "./NewRound";
 import styles from "./Game.module.css";
@@ -89,50 +90,37 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
   const handleNewRoundSave = async (roundData: NewRoundData) => {
     console.log("Saving new round:", roundData);
 
-    if (!gameId || !roundData.attackerId || !roundData.licitCombination) {
+    if (
+      !gameId ||
+      !roundData.attackerId ||
+      !roundData.bidId ||
+      !roundData.defender1Id
+    ) {
       setShowNewRoundModal(false);
       return;
     }
 
     try {
       const createRoundData = {
-        bidId: 1,
+        bidId: roundData.bidId,
         attackerId: roundData.attackerId,
-        defender1Id: roundData.defenderIds[0],
-        defender2Id: roundData.defenderIds[1],
-        attackerWonIds: roundData.wonLicits.map((id) => parseInt(id)),
-        silentBids: [],
-        contras: [],
+        defender1Id: roundData.defender1Id,
+        ...(roundData.defender2Id && { defender2Id: roundData.defender2Id }),
+        attackerWonIds: roundData.attackerWonIds,
+        silentBids: [], // TODO: Implement silent bids properly
+        contras: [], // TODO: Implement contras properly
       };
 
-      await roundService.createRound(createRoundData);
+      const newRound = await roundService.createRound(createRoundData);
 
-      const mockScoreChanges: Record<number, number> = {};
-      players.forEach((player) => {
-        mockScoreChanges[player.id] = Math.floor(Math.random() * 20) - 10;
-      });
+      // Get licit name for display
+      const selectedLicit = BIDS.find((l) => l.id === roundData.bidId);
 
-      const newRound: Round = {
-        id: Date.now(),
-        roundNumber: gameState.currentRound,
-        summary: `${
-          players.find((p) => p.id === roundData.attackerId)?.name
-        } licitje: ${roundData.licitCombination.name}`,
-        scoreChanges: mockScoreChanges,
-        completedAt: new Date(),
-      };
-
-      const newScores = { ...gameState.playerScores };
-      Object.entries(mockScoreChanges).forEach(([playerId, change]) => {
-        newScores[parseInt(playerId)] += change as number;
-      });
-
-      setGameState((prev) => ({
-        ...prev,
-        currentRound: prev.currentRound + 1,
-        rounds: [...prev.rounds, newRound],
-        playerScores: newScores,
-      }));
+      // setGameState((prev) => ({
+      //   ...prev,
+      //   currentRound: prev.currentRound + 1,
+      //   rounds: [...prev.rounds, newRound],
+      // }));
 
       setShowNewRoundModal(false);
     } catch (error) {
@@ -165,6 +153,10 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
       : null;
   };
 
+  const sortedPlayers = [...gameState.players].sort(
+    (a, b) => (b.score ?? 0) - (a.score ?? 0)
+  );
+
   const lastRound = getLastRound();
 
   if (isLoading) {
@@ -196,30 +188,22 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Állás</h3>
             <div className={styles.playersList}>
-              {players
-                .sort(
-                  (a, b) =>
-                    gameState.playerScores[b.id] - gameState.playerScores[a.id]
-                )
-                .map((player, index) => (
-                  <div key={player.id} className={styles.playerCard}>
-                    <div className={styles.playerRank}>
-                      {index === 0 && gameState.playerScores[player.id] > 0 && (
-                        <IoTrophy className={styles.trophyIcon} />
-                      )}
-                      <span className={styles.rankNumber}>#{index + 1}</span>
-                    </div>
-                    <div className={styles.playerInfo}>
-                      <span className={styles.playerName}>{player.name}</span>
-                    </div>
-                    <div className={styles.playerScore}>
-                      <span className={styles.scoreValue}>
-                        {gameState.playerScores[player.id]}
-                      </span>
-                      <span className={styles.scoreLabel}>pont</span>
-                    </div>
+              {sortedPlayers.map((player, index) => (
+                <div key={player.id} className={styles.playerCard}>
+                  <div className={styles.playerRank}>
+                    {(index === 0 && player.score) ||
+                      (0 > 0 && <IoTrophy className={styles.trophyIcon} />)}
+                    <span className={styles.rankNumber}>#{index + 1}</span>
                   </div>
-                ))}
+                  <div className={styles.playerInfo}>
+                    <span className={styles.playerName}>{player.name}</span>
+                  </div>
+                  <div className={styles.playerScore}>
+                    <span className={styles.scoreValue}>{player.score}</span>
+                    <span className={styles.scoreLabel}>pont</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
