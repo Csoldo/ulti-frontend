@@ -1,3 +1,4 @@
+import type { IGame } from "../types/Game";
 import { apiClient } from "./apiClient";
 import { API_ENDPOINTS } from "./endpoints";
 
@@ -5,51 +6,37 @@ export interface CreateGameDto {
   playerIds: number[];
 }
 
-interface IPlayer {
-  id: number;
-  name: string;
-  score: number;
-}
-
-export interface Game {
-  id: number;
-  players: IPlayer[];
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 class GameService {
-  async getAllGames(): Promise<Game[]> {
+  async getAllGames(): Promise<IGame[]> {
     try {
-      return await apiClient.get<Game[]>(API_ENDPOINTS.GAME.GET_ALL);
+      return await apiClient.get<IGame[]>(API_ENDPOINTS.GAME.GET_ALL);
     } catch (error) {
       console.error("Failed to fetch games:", error);
       throw error;
     }
   }
 
-  async getActiveGame(): Promise<Game | null> {
+  async getActiveGame(): Promise<IGame | null> {
     try {
-      return await apiClient.get<Game>(API_ENDPOINTS.GAME.GET_ACTIVE);
+      return await apiClient.get<IGame>(API_ENDPOINTS.GAME.GET_ACTIVE);
     } catch (error) {
       console.error("Failed to fetch active game:", error);
       throw error;
     }
   }
 
-  async getGameById(id: number): Promise<Game> {
+  async getGameById(id: number): Promise<IGame> {
     try {
-      return await apiClient.get<Game>(`/game/${id}`);
+      return await apiClient.get<IGame>(`/game/${id}`);
     } catch (error) {
       console.error(`Failed to fetch game ${id}:`, error);
       throw error;
     }
   }
 
-  async createGame(gameData: CreateGameDto): Promise<Game> {
+  async createGame(gameData: CreateGameDto): Promise<IGame> {
     try {
-      const response = await apiClient.post<Game>(
+      const response = await apiClient.post<IGame>(
         API_ENDPOINTS.GAME.CREATE,
         gameData
       );
@@ -61,9 +48,9 @@ class GameService {
     }
   }
 
-  async finishGame(): Promise<Game> {
+  async finishGame(): Promise<IGame> {
     try {
-      return await apiClient.post<Game>(API_ENDPOINTS.GAME.FINISH, {});
+      return await apiClient.post<IGame>(API_ENDPOINTS.GAME.FINISH, {});
     } catch (error) {
       console.error("Failed to finish game:", error);
       throw error;

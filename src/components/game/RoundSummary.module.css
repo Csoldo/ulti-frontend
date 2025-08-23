@@ -1,0 +1,90 @@
+.container {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.noRounds {
+  color: #666;
+  font-style: italic;
+  margin: 0;
+}
+
+.roundsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.roundItem {
+  background: white;
+  border-radius: 6px;
+  padding: 1rem;
+  border-left: 4px solid #007bff;
+}
+
+.attackerName {
+  margin: 0 0 0.5rem 0;
+  color: #007bff;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.licit {
+  margin: 0 0 1rem 0;
+  color: #666;
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+.playerScores {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.playerScore {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.playerScore:last-child {
+  border-bottom: none;
+}
+
+.playerName {
+  color: #333;
+  font-weight: 500;
+}
+
+.points {
+  color: #666;
+  font-weight: 600;
+  min-width: 3rem;
+  text-align: right;
+}
+
+/* Responsive design */
+@media (min-width: 768px) {
+  .roundsList {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .roundItem {
+    flex: 1;
+    min-width: 250px;
+  }
+}

@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Game } from "../components/game";
-import type { Game as GameType } from "../services/gameService";
 import { gameService } from "../services/gameService";
 import type { Player } from "../types/Player";
 import routes from "../utils/routes";
+import type { IGame } from "../types/Game";
 
 const GamePage = () => {
   const navigate = useNavigate();
-  const [gameData, setGameData] = useState<GameType | null>(null);
+  const [gameData, setGameData] = useState<IGame | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

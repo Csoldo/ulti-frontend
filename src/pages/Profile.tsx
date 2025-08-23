@@ -2,7 +2,6 @@ import {
   IoPersonCircleOutline,
   IoLogOutOutline,
   IoMailOutline,
-  IoTimeOutline,
 } from "react-icons/io5";
 import { useAuth } from "../contexts/AuthContext";
 import styles from "./Profile.module.css";
@@ -12,14 +11,6 @@ const Profile = () => {
 
   const handleLogout = () => {
     logout();
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("hu-HU", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
   };
 
   return (

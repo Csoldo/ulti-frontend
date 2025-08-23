@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { IoAdd, IoTrophy, IoTime } from "react-icons/io5";
-import type { GameState, Round, NewRoundData } from "../../types/Game";
+import { IoAdd, IoTime } from "react-icons/io5";
+import type { NewRoundData } from "../../types/Game";
 import type { Player } from "../../types/Player";
 import { gameService } from "../../services/gameService";
 import { roundService } from "../../services/roundService";
-import { BIDS } from "../../data/gameData";
 import ConfirmDialog from "../common/ConfirmDialog";
 import NewRound from "./NewRound";
 import styles from "./Game.module.css";
+import type { IGame } from "../../types/Game";
+import RoundSummary from "./RoundSummary";
 
 interface GameProps {
   players: Player[];
@@ -20,7 +21,7 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [gameState, setGameState] = useState<GameState>(() => {
+  const [gameState, setGameState] = useState<IGame>(() => {
     const initialScores: Record<number, number> = {};
     players.forEach((player) => {
       initialScores[player.id] = 0;
@@ -28,12 +29,11 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
 
     return {
       id: Date.now(),
+      isFinished: false,
       players,
       currentRound: 1,
       playerScores: initialScores,
       rounds: [],
-      isActive: true,
-      createdAt: new Date(),
     };
   });
 
@@ -46,10 +46,7 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
 
       try {
         setIsLoading(true);
-        const [game, rounds] = await Promise.all([
-          gameService.getActiveGame(),
-          roundService.getAllRounds(),
-        ]);
+        const game = await gameService.getActiveGame();
         if (!game) {
           console.error("No active game found");
           setIsLoading(false);
@@ -63,14 +60,8 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
 
         setGameState((prev) => ({
           ...prev,
-          currentRound: rounds.length + 1,
-          rounds: rounds.map((round) => ({
-            id: round.id,
-            roundNumber: rounds.indexOf(round) + 1,
-            summary: `Kör ${rounds.indexOf(round) + 1} befejezve`,
-            scoreChanges: updatedScores,
-            completedAt: new Date(round.createdAt),
-          })),
+          currentRound: game.rounds.length + 1,
+          rounds: game.rounds,
           playerScores: updatedScores,
         }));
       } catch (error) {
@@ -111,10 +102,10 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
         contras: [], // TODO: Implement contras properly
       };
 
-      const newRound = await roundService.createRound(createRoundData);
+      await roundService.createRound(createRoundData);
 
-      // Get licit name for display
-      const selectedLicit = BIDS.find((l) => l.id === roundData.bidId);
+      // // Get licit name for display
+      // const selectedLicit = BIDS.find((l) => l.id === roundData.bidId);
 
       // setGameState((prev) => ({
       //   ...prev,
@@ -147,17 +138,9 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
     onEndGame();
   };
 
-  const getLastRound = (): Round | null => {
-    return gameState.rounds.length > 0
-      ? gameState.rounds[gameState.rounds.length - 1]
-      : null;
-  };
-
   const sortedPlayers = [...gameState.players].sort(
     (a, b) => (b.score ?? 0) - (a.score ?? 0)
   );
-
-  const lastRound = getLastRound();
 
   if (isLoading) {
     return (
@@ -179,7 +162,7 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
               <div className={styles.roundInfo}>
                 <IoTime className={styles.roundIcon} />
                 <span className={styles.roundText}>
-                  {gameState.currentRound}. forduló
+                  {gameState.currentRound}. kör
                 </span>
               </div>
             </div>
@@ -191,8 +174,6 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
               {sortedPlayers.map((player, index) => (
                 <div key={player.id} className={styles.playerCard}>
                   <div className={styles.playerRank}>
-                    {(index === 0 && player.score) ||
-                      (0 > 0 && <IoTrophy className={styles.trophyIcon} />)}
                     <span className={styles.rankNumber}>#{index + 1}</span>
                   </div>
                   <div className={styles.playerInfo}>
@@ -209,35 +190,7 @@ const Game = ({ players, gameId, onEndGame }: GameProps) => {
         </div>
 
         <div className={styles.bottomSection}>
-          {lastRound && (
-            <div className={styles.lastRoundRow}>
-              <div className={styles.lastRoundContent}>
-                <p className={styles.roundSummary}>{lastRound.summary}</p>
-                <div className={styles.scoreChanges}>
-                  {Object.entries(lastRound.scoreChanges).map(
-                    ([playerId, change]) => {
-                      const player = players.find(
-                        (p) => p.id === Number(playerId)
-                      );
-                      if (!player || change === 0) return null;
-
-                      return (
-                        <span
-                          key={playerId}
-                          className={`${styles.scoreChange} ${
-                            change > 0 ? styles.positive : styles.negative
-                          }`}
-                        >
-                          {player.name}: {change > 0 ? "+" : ""}
-                          {change}
-                        </span>
-                      );
-                    }
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
+          <RoundSummary game={gameState} />
 
           <div className={styles.actions}>
             <button className={styles.newRoundButton} onClick={handleNewRound}>

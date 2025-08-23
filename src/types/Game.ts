@@ -1,20 +1,39 @@
 import type { Player } from "./Player";
 
-export interface GameState {
+export interface IBidType {
   id: number;
-  players: Player[];
-  currentRound: number;
-  rounds: Round[];
-  isActive: boolean;
-  createdAt: Date;
+  name: string;
+  score: number;
 }
 
-export interface Round {
+export interface IBid {
   id: number;
-  roundNumber: number;
-  summary: string;
-  scoreChanges: Record<number, number>; // playerId -> score change
-  completedAt: Date;
+  customName: string;
+  isRed: boolean;
+  bidTypes: IBidType[];
+}
+
+export interface IRound {
+  id: number;
+  bid: IBid;
+  attacker: Player;
+  defender1: Player;
+  defender2: Player;
+  attackerWonIds: number[];
+  attackerPoints: number;
+  defender1Points: number;
+  defender2Points: number;
+}
+
+export interface IGame {
+  id: number;
+  isFinished: boolean;
+  players: Player[];
+  rounds: IRound[];
+  playerScores: Record<number, number>;
+  currentRound: number;
+  // updatedAt: string;
+  // createdAt: string;
 }
 
 // Licit types
